@@ -1,0 +1,234 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.contenedores{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    overflow: hidden;
+    position: relative;
+}
+
+.imagen-lateral{
+    flex: 0 0 45%;
+    border-radius: 0 80% 80% 0 / 0 80% 80% 0;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.seccion-principal{
+    flex: 0 0 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.logos{
+    position: absolute; /* Lo saca del centro y permite moverlo libremente */
+    top: 40px;          /* Lo empuja 40px hacia abajo desde el techo */
+    left: 0;            /* Lo ancla exactamente al borde izquierdo */
+    padding: 0 50px;    /* Relleno interior: 0px vertical, 50px horizontal (evita que toque la orilla) */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    
+}
+
+.logos img{
+    max-width: 180px;
+    width: 12vw;
+    height: auto;
+}
+
+.titulos{
+    display: flex;
+    flex-direction: column;
+}
+
+.principal{
+    font-size: 3rem;
+    color: #CD5124;
+    font-width: 700;
+}
+
+.secundario{
+    font-size: 1rem;
+    color: #757575;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.informacion {
+    width: 100%;
+    max-width: 450px;
+    margin-top: 30px;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #e0e0e0; /* Un borde súper sutil */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Sombra muy suave para darle volumen */
+}
+
+
+.informacion h2 {
+    font-size: 0.85rem;
+    color: #757575;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 5px;
+}
+
+.maestra {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.maestra p {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #2C3E50; /* Un azul oscuro para resaltar la autoridad */
+}
+
+.alumnos {
+    display: flex;
+    flex-wrap: wrap; /* Esto permite que el h2 ocupe su propia línea y empuje lo demás abajo */
+    justify-content: space-between; /* Manda los nombres a la izq y matrículas a la der */
+}
+
+.alumnos h2 {
+    width: 100%; /* Forzamos al título a abarcar todo el ancho */
+    text-align: center;
+}
+
+.nombres {
+    text-align: left;
+}
+
+.nombres p {
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    margin-bottom: 8px; /* Da un poco de aire entre cada línea */
+}
+
+.matricula {
+    text-align: right;
+}
+
+.matricula p {
+    font-size: 0.95rem;
+    color: #CD5124; /* Usamos tu color naranja principal para que resalte el número */
+    font-weight: 600;
+    margin-bottom: 8px; /* Debe ser igual al de nombres para que queden alineados */
+}
+
+.botones{
+    width: 100%;
+    max-width: 400px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;   
+    gap: 15px;
+}
+
+.botones a{
+    padding: 15px 70px;
+    background-color: #54728c;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.botones a:hover{
+    background-color: #3d5a73;
+}
+
+.pie-pagina {
+    position: absolute; 
+    bottom: 30px;       
+    width: 100%;        
+    text-align: right; 
+    padding: 0 50px;
+}
+
+.pie-pagina p {
+    font-size: 0.85rem;  
+    color: #9e9e9e;     
+    font-weight: 400;
+    letter-spacing: 1px; 
+}
+
+.oculto {
+    display: none !important;
+}
+
+.contenedor-2{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.contenedor-2 img{
+    max-width: 90vw; 
+    max-height: 80vh; 
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);              
+}
+
+.contenedor-2 a{
+    padding: 15px 70px;
+    background-color: #54728c;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+ 
+.contenedor-2 a:hover{
+    background-color: #3d5a73;
+}

@@ -1,5 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BushiCode Project</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/portada-maestra.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <main class="contenedor-principal">
+            
+            <!--Portada-->
+            <div class="contenedores" id="portada">
+                <div class="imagen-lateral">
+                    <img class="logo" src="{{ url_for('static', filename='img/Python.png') }}" alt="Logo Bushicode">
+                </div>
+
+                <div class="seccion-principal">
+                    <div class="logos">
+                        <img src="{{ url_for('static', filename='img/LogoICBI.png') }}" alt="Logo icbi">
+                        <img src="{{ url_for('static', filename='img/LogoUaeh.png') }}" alt="Logo uaeh">
+                    </div>
+
+                    <div class="titulos">
+                        <h1 class="principal">BushiCode</h1>
+                        <h2 class="secundario">Project</h2>
+                    </div>
+
+                    <div class="informacion">
+                        <div class="maestra">
+                            <h2>Catedratico</h2>
+                            <p>DCC. Martha Idalid Rivera Gonzalez</p>
+                        </div>
+
+                        <div class="alumnos">
+                            <h2>Desarrolladores:</h2>
+                            <div class="nombres">
+                                <p>Arana Juarez Raúl</p>
+                                <p>Pérez García Alejandro Máximo</p>
+                                <p>Vazquez Pontaza Fernando</p>
+                                <p>Zuñiga Montoya José Antonio</p>
+                            </div>
+
+                            <div class="matricula">
+                                <p>379933</p>
+                                <p>446440</p>
+                                <p>445851</p>
+                                <p>499090</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="botones">
+                        <a href="/usuario">Bienvenido</a>
+                        <a onclick="cambiarVista('red-semantica')" >Red semantica</a>
+                    </div>
+
+                    <footer class="pie-pagina">
+                        <p>02/04/2026</p>
+                    </footer>
+                </div>
+            </div>
+
+            <!--Red semantica-->
+           <div class="contenedor-2" id="red-semantica" >
+                <img src="/api/red-semantica" alt="Red Semántica BushiCode">               
+                <a href="#" onclick="cambiarVista('portada')">Volver al Inicio</a>
+            </div>
+
+        </main>
+         <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
 </html>
