@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BushiCode Project - Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <main class="contenedor-principal">
+           
+            <!--Login-->
+            <div id="login" class="contenedor-login">
+                <div class="seccion-login">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">BIENVENIDO!</h2>
+                        </div>
+                    </div>
+
+                    <form class="formulario-login" method="POST">
+                        <div class="grupo-entrada">
+                            <label for="usuario" class="etiqueta-con-icono">
+                                Usuario 
+                                <img src="{{ url_for('static', filename='IMG/ICONS/User.png') }}" alt="Icono Usuario" class="icono-input">
+                            </label>
+
+                            <input 
+                                type="text" 
+                                id="usuario" 
+                                name="usuario" 
+                                placeholder="0000" 
+                                class="campo-texto">
+                            {% if error %}
+                                <p class="mensaje-error">
+                                    {{ error }}
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="contrasena" class="etiqueta-con-icono">
+                                Contraseña 
+                                <img src="{{ url_for('static', filename='img/icons/Candado.png') }}" alt="Icono Candado" class="icono-input">
+                            </label>
+
+                            <input 
+                                type="password" 
+                                id="contrasena" 
+                                name="contrasena" 
+                                placeholder="******" 
+                                class="campo-texto"
+                                required>
+                        
+                            {% if error %}
+                                <p class="mensaje-error">
+                                    {{ error }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <a class="enlace-crear-usuario" onclick="cambiarVistaLogin('crear-usuario')">Crear nuevo usuario</a>
+
+                    <div class="boton">
+                        <a class="azul">Ingresar</a>
+                    </div>
+                </div>
+
+                <div class="logo-lateral">
+                    <img class="imagen-lateral" 
+                    src="{{ url_for('static', filename='img/Imgen-Inicio.png') }}" 
+                    alt="Imagen decorativa">
+                </div>
+            </div>
+
+            <!--Crear usuario-->
+            <div id="crear-usuario" class="oculto">
+                <div class="contenedor-crear-usuario">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">CREAR USUARIO</h2>
+                        </div>
+                    </div>
+
+                    <form class="formulario-nuevo-usuario" method="POST">  
+                        <div class="grupo-entrada">
+                            <label for="nombre" class="etiqueta-sin-icono">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" class="campo-texto" required>
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="usuario-c" class="etiqueta-sin-icono">Usuario (ID)</label>
+                            <input type="text" id="usuario-c" name="usuario" placeholder="Tu usuario" class="campo-texto" required>
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="correo" class="etiqueta-sin-icono">Correo</label>
+                            <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required class="campo-texto">
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="contrasena-c" class="etiqueta-sin-icono">Contraseña</label>
+                            <input type="password" id="contrasena-c" name="contrasena" placeholder="******" required class="campo-texto">
+                        </div>
+
+                        {% if error %}
+                            <p class="mensaje-error">{{ error }}</p>
+                        {% endif %}                     
+
+                        <div class="boton">
+                            <a class="azul">Crear cuenta</a>
+                            <a class="gris" onclick="cambiarVistaLogin('login')">Ya tengo una cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--Preguntas-->
+            <div id="preguntas">
+
+            </div>
+
+        </main>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
+</html>

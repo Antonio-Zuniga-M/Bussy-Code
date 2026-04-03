@@ -13,5 +13,9 @@ def mostrar_red_semantica():
     imagen_en_memoria = generar_imagen_red()
     return send_file(imagen_en_memoria, mimetype='image/png')
 
+@app.route('/login')
+def mostrar_login():
+    return render_template('login.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
