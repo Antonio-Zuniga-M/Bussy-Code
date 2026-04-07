@@ -1,0 +1,49 @@
+preguntas_quiz = [
+# -------- BLOQUE 1: Sintaxis Básica --------
+{"id":1,"bloque":1,"tipo":"single","pregunta":"¿Cuál es el valor de 'x' después de ejecutar: x = 5 * int('2')?","opciones":["52","10","Error de sintaxis","5.2"],"respuesta_correcta":[1]},
+{"id":2,"bloque":1,"tipo":"multiple","pregunta":"Selecciona las afirmaciones verdaderas sobre operadores en Python:","opciones":["10 // 3 devuelve 3.33 (decimal)","2 ** 3 devuelve 8 (potencia)","True and False devuelve True","10 % 2 == 0 devuelve True (módulo)"],"respuesta_correcta":[1,3]},
+{"id":3,"bloque":1,"tipo":"single","pregunta":"¿Cuántas declaraciones 'elif' pueden existir dentro de una estructura 'if'?","opciones":["Solo una","Ninguna","Ilimitadas","Máximo tres"],"respuesta_correcta":[2]},
+{"id":4,"bloque":1,"tipo":"single","pregunta":"¿Qué secuencia de números genera la expresión list(range(1, 4))?","opciones":["[1, 2, 3, 4]","[0, 1, 2, 3]","[1, 2, 3]","[2, 3, 4]"],"respuesta_correcta":[2]},
+{"id":5,"bloque":1,"tipo":"single","pregunta":"¿Cuál es la diferencia principal entre los ciclos 'for' y 'while'?","opciones":["'while' solo sirve para iterar listas","'while' se ejecuta mientras una condición sea verdadera","'for' siempre crea un ciclo infinito"],"respuesta_correcta":[1]},
+
+# -------- BLOQUE 2: Estructuras de Datos --------
+{"id":6,"bloque":2,"tipo":"single","pregunta":"¿Qué método se utiliza para agregar un nuevo elemento al final de una lista existente?","opciones":["add()","insert()","append()","sumar()"],"respuesta_correcta":[2]},
+{"id":7,"bloque":2,"tipo":"multiple","pregunta":"¿Cuáles de las siguientes son características de las tuplas (tuples)?","opciones":["Son inmutables (no se pueden modificar)","Se definen usando llaves {}","Pueden contener diferentes tipos de datos (mixtos)","Son más lentas de procesar que las listas"],"respuesta_correcta":[0,2]},
+{"id":8,"bloque":2,"tipo":"single","pregunta":"¿Cuál es la forma segura de obtener un valor de un diccionario sin que el programa lance un error si la clave no existe?","opciones":["diccionario['edad']","diccionario.get('edad')","diccionario.fetch('edad')"],"respuesta_correcta":[1]},
+{"id":9,"bloque":2,"tipo":"multiple","pregunta":"¿Qué características definen a la estructura de datos 'set' (conjunto)?","opciones":["Permite elementos duplicados","Mantiene un orden estricto de inserción","Elimina automáticamente los elementos duplicados","Permite operaciones matemáticas como unión e intersección"],"respuesta_correcta":[2,3]},
+
+# -------- BLOQUE 3: Funciones y Estilo --------
+{"id":10,"bloque":3,"tipo":"single","pregunta":"Si una función en Python termina su ejecución sin alcanzar una instrucción 'return', ¿qué valor devuelve por defecto?","opciones":["0 (Cero)","Lanza un Error","None","False"],"respuesta_correcta":[2]},
+{"id":11,"bloque":3,"tipo":"multiple","pregunta":"Sobre el alcance de las variables (Scope) en Python, ¿cuáles afirmaciones son correctas?","opciones":["Las variables locales también son accesibles globalmente","La palabra reservada 'global' permite modificar variables externas","Las variables locales se destruyen al terminar la función"],"respuesta_correcta":[1,2]},
+{"id":12,"bloque":3,"tipo":"single","pregunta":"Según el estándar PEP 8, ¿cuál es el formato recomendado para nombrar funciones y variables?","opciones":["MiFuncion (PascalCase)","mi_funcion (snake_case)","miFuncion (camelCase)"],"respuesta_correcta":[1]},
+{"id":13,"bloque":3,"tipo":"single","pregunta":"¿Para qué se utiliza la palabra reservada 'lambda' en Python?","opciones":["Para crear clases dinámicas","Para crear funciones anónimas y de una sola línea","Para el manejo de excepciones y errores"],"respuesta_correcta":[1]},
+{"id":14,"bloque":3,"tipo":"single","pregunta":"¿Cuál sería el resultado de evaluar: list(filter(lambda x: x > 2, [1, 2, 3]))?","opciones":["[3]","[False, False, True]","Lanza un Error"],"respuesta_correcta":[0]},
+{"id":15,"bloque":3,"tipo":"single","pregunta":"Selecciona la sintaxis correcta para una comprensión de listas (list comprehension) que obtenga solo números pares:","opciones":["[x for x in range(5) if x % 2 == 0]","[if x % 2 == 0 for x in range(5)]"],"respuesta_correcta":[0]},
+
+# -------- BLOQUE 4: Programación Orientada a Objetos (POO) --------
+{"id":16,"bloque":4,"tipo":"single","pregunta":"Dentro de los métodos de una clase en Python, ¿qué representa el parámetro 'self'?","opciones":["A la clase padre (herencia)","Al entorno global del programa","A la instancia actual del objeto"],"respuesta_correcta":[2]},
+{"id":17,"bloque":4,"tipo":"single","pregunta":"¿Qué decorador se utiliza para definir un método que recibe la clase ('cls') como primer argumento en lugar de la instancia?","opciones":["@staticmethod","@classmethod","@abstractmethod"],"respuesta_correcta":[1]},
+{"id":18,"bloque":4,"tipo":"single","pregunta":"¿Cuál es el propósito principal de la función incorporada super()?","opciones":["Heredar atributos a clases hijas","Invocar métodos y atributos de la clase padre","Crear un superusuario en el sistema"],"respuesta_correcta":[1]},
+{"id":19,"bloque":4,"tipo":"single","pregunta":"¿Qué método mágico (dunder method) debes sobreescribir para definir la representación legible de un objeto al usar print()?","opciones":["__print__","__string__","__str__","__init__"],"respuesta_correcta":[2]},
+
+# -------- BLOQUE 5: Errores y Entorno --------
+{"id":20,"bloque":5,"tipo":"single","pregunta":"En un bloque de manejo de excepciones (try / except), ¿qué cláusula se ejecuta SIEMPRE, sin importar si hubo error o no?","opciones":["else","finally","catch","always"],"respuesta_correcta":[1]},
+{"id":21,"bloque":5,"tipo":"single","pregunta":"¿Qué palabra reservada se utiliza para forzar (lanzar) una excepción manualmente en tu código?","opciones":["throw","error","raise","trigger"],"respuesta_correcta":[2]},
+{"id":22,"bloque":5,"tipo":"single","pregunta":"¿Cuál es la principal ventaja de utilizar un context manager como 'with open(...)' al leer archivos?","opciones":["Hace que la lectura sea mucho más rápida","Asegura que el archivo se cierre automáticamente al terminar","Evita inyecciones SQL en bases de datos"],"respuesta_correcta":[1]},
+{"id":23,"bloque":5,"tipo":"multiple","pregunta":"¿Cuáles de los siguientes son comandos válidos y comunes en el sistema de control de versiones Git?","opciones":["git init","git save","git commit","git push"],"respuesta_correcta":[0,2,3]},
+{"id":24,"bloque":5,"tipo":"single","pregunta":"¿Para qué se utiliza comúnmente la herramienta 'venv' en el desarrollo con Python?","opciones":["Para crear aplicaciones de navegador","Para crear entornos virtuales y aislar las dependencias de un proyecto"],"respuesta_correcta":[1]},
+
+# -------- BLOQUE 6: Python Avanzado --------
+{"id":25,"bloque":6,"tipo":"multiple","pregunta":"¿Cuáles son características fundamentales de los decoradores en Python?","opciones":["Son funciones que modifican el comportamiento de otras funciones","Reciben una función como argumento y devuelven otra función","Se invocan utilizando el símbolo '&'"],"respuesta_correcta":[0,1]},
+{"id":26,"bloque":6,"tipo":"single","pregunta":"¿Qué función incorporada se utiliza para obtener el siguiente elemento de un objeto iterador?","opciones":["advance()","next()","step()","iter()"],"respuesta_correcta":[1]},
+{"id":27,"bloque":6,"tipo":"single","pregunta":"¿Qué palabra reservada transforma una función normal en una función generadora (Generator)?","opciones":["generate","async","yield","return"],"respuesta_correcta":[2]},
+{"id":28,"bloque":6,"tipo":"single","pregunta":"¿Qué par de métodos mágicos debe implementar una clase para funcionar como un Context Manager (usable con 'with')?","opciones":["__with__ y __close__","__enter__ y __exit__","__open__ y __close__"],"respuesta_correcta":[1]},
+{"id":29,"bloque":6,"tipo":"single","pregunta":"En la librería de testing 'unittest', ¿qué método se usa para comprobar si dos valores son iguales?","opciones":["assertEqual()","assert_equals()","check_equal()"],"respuesta_correcta":[0]},
+
+# -------- BLOQUE 7: Nivel Experto (Arquitectura y Rendimiento) --------
+{"id":30,"bloque":7,"tipo":"multiple","pregunta":"Selecciona las afirmaciones correctas sobre 'asyncio' y el asincronismo en Python:","opciones":["La palabra 'await' solo puede usarse dentro de funciones 'async def'","El asincronismo bloquea por completo el hilo principal (Main Thread)","Mejora significativamente el rendimiento en operaciones de entrada/salida (I/O)"],"respuesta_correcta":[0,2]},
+{"id":31,"bloque":7,"tipo":"single","pregunta":"¿Cuál es la diferencia clave entre 'Multithreading' (hilos) y 'Multiprocessing' (procesos) en Python respecto a tareas intensivas de CPU?","opciones":["Los hilos aprovechan múltiples núcleos del CPU, los procesos no","Multiprocessing evade el GIL usando procesos separados, mejorando el uso de CPU","Son exactamente lo mismo a nivel de hardware"],"respuesta_correcta":[1]},
+{"id":32,"bloque":7,"tipo":"single","pregunta":"¿Qué es el GIL (Global Interpreter Lock) en CPython?","opciones":["Un sistema de seguridad para prevenir inyecciones de código","Un mecanismo que asegura que solo un hilo (thread) ejecute código Python a la vez","Una librería estándar para gestionar peticiones de red"],"respuesta_correcta":[1]},
+{"id":33,"bloque":7,"tipo":"single","pregunta":"En Python 3, ¿cuál es la metaclase base por defecto de la cual derivan todas las clases?","opciones":["object","class","type","meta"],"respuesta_correcta":[2]},
+{"id":34,"bloque":7,"tipo":"multiple","pregunta":"¿Cuáles son herramientas o conceptos válidos relacionados con la optimización de rendimiento en Python?","opciones":["Cython (compilar Python a C)","Declarar todas las variables como globales","Gestión del Garbage Collector (GC)"],"respuesta_correcta":[0,2]},
+]
