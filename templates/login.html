@@ -12,7 +12,7 @@
         <main class="contenedor-principal">
            
             <!--Login-->
-            <div id="login" class="contenedor-login">
+            <div id="login" class="contenedor-login" {% if vista_activa != 'login' %} oculto {% endif %}">
                 <div class="seccion-login">
                     <div class="encabezado-marca">
                         <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
@@ -54,8 +54,7 @@
                                 name="contrasena" 
                                 placeholder="******" 
                                 class="campo-texto"
-                                required>
-                        
+                                required>                     
                             {% if error %}
                                 <p class="mensaje-error">
                                     {{ error }}
@@ -64,10 +63,10 @@
                         </div>
                     </form>
 
-                    <a class="enlace-crear-usuario" onclick="cambiarVistaLogin('crear-usuario')">Crear nuevo usuario</a>
+                    <a class="enlace-crear-usuario" onclick="cambiarVistaLogin('crear-usuario', limpiarErrores = true)">Crear nuevo usuario</a>
 
                     <div class="boton">
-                        <a class="azul">Ingresar</a>
+                        <button class="azul">Ingresar</button>
                     </div>
                 </div>
 
@@ -79,7 +78,7 @@
             </div>
 
             <!--Crear usuario-->
-            <div id="crear-usuario" class="oculto">
+            <div id="crear-usuario" class="oculto" {% if vista_activa != 'crear-usuario' %} oculto {% endif %}>
                 <div class="contenedor-crear-usuario">
                     <div class="encabezado-marca">
                         <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
@@ -89,7 +88,7 @@
                         </div>
                     </div>
 
-                    <form class="formulario-nuevo-usuario" method="POST">  
+                    <form class="formulario-nuevo-usuario" action="/crear_usuario" method="POST">  
                         <div class="grupo-entrada">
                             <label for="nombre" class="etiqueta-sin-icono">Nombre</label>
                             <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" class="campo-texto" required>
@@ -110,24 +109,77 @@
                             <input type="password" id="contrasena-c" name="contrasena" placeholder="******" required class="campo-texto">
                         </div>
 
-                        {% if error %}
-                            <p class="mensaje-error">{{ error }}</p>
+                        {% if error_registro %}
+                            <p class="mensaje-error">{{ error_registro }}</p>
                         {% endif %}                     
 
                         <div class="boton">
-                            <a class="azul">Crear cuenta</a>
-                            <a class="gris" onclick="cambiarVistaLogin('login')">Ya tengo una cuenta</a>
+                            <!--type="submit" es para enviarlo al main.py-->
+                            <button type="submit" class="azul">Crear cuenta</button>
+                            <a class="gris" onclick="cambiarVistaLogin('login', limpiarErrores = true)">Ya tengo una cuenta</a>
                         </div>
                     </form>
                 </div>
             </div>
 
             <!--Preguntas-->
-            <div id="preguntas">
+            <div id="preguntas" class="oculto">
+                <div class="contenedor-preguntas">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">QUIZ NIVELACION</h2>
+                        </div>
+                    </div>
 
+                    <div id="caja-quiz" class="quiz-tarjeta">
+                        <h3 id="texto-pregunta" class="quiz-pregunta">Cargando...</h3>
+                        <p id="hint-multiple" class="texto-multiple">
+                            ✦ Esta pregunta tiene múltiples respuestas correctas. Selecciona todas las que apliquen.
+                        </p>
+                        <div id="contenedor-opciones" class="quiz-opciones"></div>
+                        
+                        <div class="boton">
+                            <button id="btn-siguiente" class="btn-confirmar" onclick="siguientePregunta()" style="display:none; margin-top:20px;">
+                                Confirmar y Siguiente
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!--Resultado-->
+            <div id="resultado" class="oculto">
+                <div class="contenedor-resultado">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">resultado diagnostico</h2>
+                        </div>
+                    </div>
+
+                    <p class="resultado-subtitulo">Tu nivel inicial es</p>
+                    <div class="resultado-nivel" id="resultado-nivel">—</div>
+                    <p class="resultado-bloque" id="resultado-bloque"></p>
+
+                    <div class="boton">
+                        <a href="{{ url_for('inicio') }}" class="azul">Ir al inicio</a>
+                    </div> 
+                </div>
+            </div>
+            
         </main>
-        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script  src="{{ url_for('static', filename='js/app.js') }}"></script>
+        {% if vista_activa %}
+            <script>
+                {% if error or error_registro %}
+                    cambiarVistaLogin('{{ vista_activa }}', false);
+                {% else %}
+                    cambiarVistaLogin('{{ vista_activa }}', true);
+                {% endif %}
+            </script>     
+        {% endif %}         
     </body>
 </html>
