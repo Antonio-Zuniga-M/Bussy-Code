@@ -61,13 +61,18 @@
                                 </p>
                             {% endif %}
                         </div>
+
+                        <div class="boton" style="margin-top: 20px;">
+                            <button type="submit" class="azul">Ingresar</button>
+                        </div>
                     </form>
 
                     <a class="enlace-crear-usuario" onclick="cambiarVistaLogin('crear-usuario', limpiarErrores = true)">Crear nuevo usuario</a>
-
+<!--
                     <div class="boton">
                         <button class="azul">Ingresar</button>
                     </div>
+                    -->
                 </div>
 
                 <div class="logo-lateral">
@@ -140,11 +145,13 @@
                         </p>
                         <div id="contenedor-opciones" class="quiz-opciones"></div>
                         
+                      
                         <div class="boton">
                             <button id="btn-siguiente" class="btn-confirmar" onclick="siguientePregunta()" style="display:none; margin-top:20px;">
                                 Confirmar y Siguiente
                             </button>
                         </div>
+                       
                     </div>
                 </div>
             </div>
@@ -165,8 +172,8 @@
                     <p class="resultado-bloque" id="resultado-bloque"></p>
 
                     <div class="boton">
-                        <a href="{{ url_for('inicio') }}" class="azul">Ir al inicio</a>
-                    </div> 
+                        <a href="{{ url_for('ver_curso') }}" class="azul">Ir a mis Cursos</a>
+                    </div>
                 </div>
             </div>
             

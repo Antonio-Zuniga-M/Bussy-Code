@@ -3,110 +3,415 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BushiCode Project - Login</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+        <title>BushiCode Project - Cursos</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='CSS/cursos.css') }}">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        
     </head>
 
     <body>
-        <main class="contenedor-principal">
+    <main class="contenedor-principal seccion-principal">
 
-            <!--Logo-->
-            <div class="encabezado-marca">
-                <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+        <div class="encabezado-marca">
+            <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+            <div class="titulos">
+                <h1 class="titulos-marca">BushiCode</h1>
+                <h2 class="subtitulo">CURSOS</h2>
+                <h3 class="mensaje">Hola {{ nombre }} | Nivel Actual: <span id="nivel-usuario">{{ nivel }}</span></h3>
+            </div>
+        </div>
 
-                <div class="titulos">
-                    <h1 class="titulos-marca">BushiCode</h1>
-                    <h2 class="subtitulo">CURSOS</h2>
-                    <h3 class="mensaje">Hola {{ nombre }} | Nivel: {{ nivel }}</h3>
+        <div class="contenedor-boton">
+            <button onclick="document.getElementById('modal-comentarios').style.display='block'" class="btn-estudiar" style="background-color: #3498db; margin-bottom: 0;">
+                💬 Dejar un Comentario
+            </button>
+            <a href="/logout" class="boton-ingresar" style="background-color: #e74c3c;">Salir</a>
+        </div>
+
+        <div id="modal-comentarios" class="oculto" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: #ffffff; padding: 30px; border-radius: 16px; z-index: 1000; border: 2px solid #3498db; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="color: #314353; margin-top: 0; margin-bottom: 15px;">¿Qué te parece el curso?</h3>
+            <form action="/guardar_comentario" method="POST">
+                <input type="hidden" name="nivel_curso" id="input-nivel-comentario" value="{{ nivel }}">
+                <textarea name="comentario" rows="4" style="width: 100%; border-radius: 8px; border: 1px solid #ccd0d5; padding: 12px; margin-bottom: 15px; resize: none; font-family: 'Inter', sans-serif;" placeholder="Escribe tu comentario, duda o sugerencia para la base de datos..." required></textarea>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" onclick="document.getElementById('modal-comentarios').style.display='none'" class="btn-estudiar" style="background-color: #95a5a6; margin-bottom: 0;">Cancelar</button>
+                    <button type="submit" class="btn-estudiar" style="background-color: #2ecc71; margin-bottom: 0;">Enviar</button>
                 </div>
+            </form>
+        </div>
+
+        <div class="nav-cursos">
+            <label for="selector-curso" style="color: white; margin-right: 10px;">Navegar a cursos desbloqueados:</label>
+            <select id="selector-curso" onchange="cambiarCurso(this.value)">
+                </select>
+        </div>
+
+        <div id="contenedor-cursos">
+
+            <div id="BRONCE-3" class="cursos oculto modulo desbloqueado">
+                <h2>BRONCE 3: Hola Mundo</h2>
+                <div class="sub-modulo">
+                    <h3>1. ¿Qué es Python?</h3>
+                    <p>Un lenguaje fácil de leer, poderoso y muy popular. Ideal para empezar.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Tu primer comando</h3>
+                    <p>Usa <code>print("Hola Mundo")</code> para mostrar texto en la pantalla.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="BRONCE-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #f39c12;">Aprobar y Subir a BRONCE 2</button>
+                </form>
             </div>
 
-            <!--Botones-->
-            <div class="contenedor-boton">
-                <a href="/dashboard" class="boton-ingresar">Comentarios</a>
-                <a href="/logout" class="boton-ingresar">Salir</a>
+            <div id="BRONCE-2" class="cursos oculto modulo desbloqueado">
+                <h2>BRONCE 2: Variables</h2>
+                <div class="sub-modulo">
+                    <h3>1. ¿Qué es una variable?</h3>
+                    <p>Es como una "caja" en la memoria donde guardas información. Ej: <code>edad = 20</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Reglas para nombrarlas</h3>
+                    <p>No pueden empezar con números ni tener espacios (usa <code>guion_bajo</code>).</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="BRONCE-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #f39c12;">Aprobar y Subir a BRONCE 1</button>
+                </form>
             </div>
 
-            <!--Cursos-->
-            <dev id="bronce-3" class="cursos">
+            <div id="BRONCE-1" class="cursos oculto modulo desbloqueado">
+                <h2>BRONCE 1: Tipos de Datos</h2>
+                <div class="sub-modulo">
+                    <h3>1. Strings (Cadenas)</h3>
+                    <p>Cualquier texto entre comillas. Ej: <code>nombre = "Goku"</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Enteros y Flotantes</h3>
+                    <p>Números sin decimales (int) y con decimales (float). Ej: <code>pi = 3.1416</code></p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATA-3">
+                    <button type="submit" class="btn-estudiar" style="background-color: #bdc3c7; color: #2c3e50;">Aprobar y Subir a PLATA 3</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="PLATA-3" class="cursos oculto modulo desbloqueado">
+                <h2>PLATA 3: Operadores</h2>
+                <div class="sub-modulo">
+                    <h3>1. Matemáticos</h3>
+                    <p>Suma <code>+</code>, Resta <code>-</code>, Multiplicación <code>*</code>, División <code>/</code>.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Lógicos</h3>
+                    <p>Usa <code>and</code>, <code>or</code> y <code>not</code> para combinar condiciones.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATA-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #bdc3c7; color: #2c3e50;">Aprobar y Subir a PLATA 2</button>
+                </form>
+            </div>
 
-            <dev id="bronce-2" class="cursos">
+            <div id="PLATA-2" class="cursos oculto modulo desbloqueado">
+                <h2>PLATA 2: Condicionales I</h2>
+                <div class="sub-modulo">
+                    <h3>1. El bloque if</h3>
+                    <p>Si una condición es verdadera, ejecuta el código. <code>if edad >= 18:</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. El bloque else</h3>
+                    <p>Si la condición del "if" es falsa, entra aquí por defecto.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATA-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #bdc3c7; color: #2c3e50;">Aprobar y Subir a PLATA 1</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="PLATA-1" class="cursos oculto modulo desbloqueado">
+                <h2>PLATA 1: Condicionales II</h2>
+                <div class="sub-modulo">
+                    <h3>1. El bloque elif</h3>
+                    <p>Te permite evaluar múltiples condiciones en cadena antes de llegar al else.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Anidación</h3>
+                    <p>Colocar un <code>if</code> dentro de otro <code>if</code>. Recuerda cuidar la indentación.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="ORO-3">
+                    <button type="submit" class="btn-estudiar" style="background-color: #f1c40f; color: #2c3e50;">Aprobar y Subir a ORO 3</button>
+                </form>
+            </div>
 
-            <dev id="bronce-1" class="cursos">
+            <div id="ORO-3" class="cursos oculto modulo desbloqueado">
+                <h2>ORO 3: Ciclo For</h2>
+                <div class="sub-modulo">
+                    <h3>1. Iteración</h3>
+                    <p>Recorre elementos uno por uno. <code>for letra in "Hola":</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Función range()</h3>
+                    <p>Crea secuencias de números. <code>for i in range(5):</code> repetirá 5 veces.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="ORO-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #f1c40f; color: #2c3e50;">Aprobar y Subir a ORO 2</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="ORO-2" class="cursos oculto modulo desbloqueado">
+                <h2>ORO 2: Ciclo While</h2>
+                <div class="sub-modulo">
+                    <h3>1. Bucle por condición</h3>
+                    <p>Ejecuta código mientras la condición sea True. <code>while vidas > 0:</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Bucles infinitos</h3>
+                    <p>Cuidado con no cambiar la variable de control, o el programa se trabará.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="ORO-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #f1c40f; color: #2c3e50;">Aprobar y Subir a ORO 1</button>
+                </form>
+            </div>
 
-            <dev id="plata-3" class="cursos">
+            <div id="ORO-1" class="cursos oculto modulo desbloqueado">
+                <h2>ORO 1: Listas</h2>
+                <div class="sub-modulo">
+                    <h3>1. Colecciones</h3>
+                    <p>Guarda varios datos en corchetes. <code>nombres = ["Ana", "Juan"]</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Métodos útiles</h3>
+                    <p>Agrega elementos con <code>.append()</code> o elimínalos con <code>.remove()</code>.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATINO-3">
+                    <button type="submit" class="btn-estudiar" style="background-color: #3498db;">Aprobar y Subir a PLATINO 3</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="PLATINO-3" class="cursos oculto modulo desbloqueado">
+                <h2>PLATINO 3: Tuplas y Sets</h2>
+                <div class="sub-modulo">
+                    <h3>1. Tuplas</h3>
+                    <p>Como las listas, pero no se pueden modificar. Usan paréntesis <code>()</code>.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Sets (Conjuntos)</h3>
+                    <p>Colecciones sin orden que automáticamente eliminan datos duplicados.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATINO-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #3498db;">Aprobar y Subir a PLATINO 2</button>
+                </form>
+            </div>
 
-            <dev id="plata-2" class="cursos">
+            <div id="PLATINO-2" class="cursos oculto modulo desbloqueado">
+                <h2>PLATINO 2: Diccionarios</h2>
+                <div class="sub-modulo">
+                    <h3>1. Clave y Valor</h3>
+                    <p>Guardan datos con etiquetas. <code>auto = {"marca": "Ford", "año": 2020}</code></p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Acceso a datos</h3>
+                    <p>Para ver el valor, llamas la clave: <code>print(auto["marca"])</code>.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="PLATINO-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #3498db;">Aprobar y Subir a PLATINO 1</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="PLATINO-1" class="cursos oculto modulo desbloqueado">
+                <h2>PLATINO 1: Funciones I</h2>
+                <div class="sub-modulo">
+                    <h3>1. Definición</h3>
+                    <p>Empaqueta código para reutilizarlo usando la palabra <code>def</code>.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Parámetros y Return</h3>
+                    <p>Recibe datos en los paréntesis y devuelve resultados con <code>return</code>.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="DIAMANTE-3">
+                    <button type="submit" class="btn-estudiar" style="background-color: #9b59b6;">Aprobar y Subir a DIAMANTE 3</button>
+                </form>
+            </div>
 
-            <dev id="plata-1" class="cursos">
+            <div id="DIAMANTE-3" class="cursos oculto modulo desbloqueado">
+                <h2>DIAMANTE 3: Funciones II</h2>
+                <div class="sub-modulo">
+                    <h3>1. Scope (Alcance)</h3>
+                    <p>Diferencia entre variables globales (todo el código) y locales (solo en función).</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Funciones Lambda</h3>
+                    <p>Funciones anónimas de una sola línea. Rápidas y elegantes.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="DIAMANTE-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #9b59b6;">Aprobar y Subir a DIAMANTE 2</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="DIAMANTE-2" class="cursos oculto modulo desbloqueado">
+                <h2>DIAMANTE 2: Manejo de Errores</h2>
+                <div class="sub-modulo">
+                    <h3>1. Try / Except</h3>
+                    <p>Atrapa errores ("crashes") sin que el programa se cierre de golpe.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Finally</h3>
+                    <p>Un bloque de código que se ejecuta siempre, haya ocurrido error o no.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="DIAMANTE-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #9b59b6;">Aprobar y Subir a DIAMANTE 1</button>
+                </form>
+            </div>
 
-            <dev id="oro-3" class="cursos">
+            <div id="DIAMANTE-1" class="cursos oculto modulo desbloqueado">
+                <h2>DIAMANTE 1: Archivos y JSON</h2>
+                <div class="sub-modulo">
+                    <h3>1. Leer archivos</h3>
+                    <p>Usa <code>with open("datos.txt", "r") as archivo:</code> para leer txt.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Formato JSON</h3>
+                    <p>Ideal para guardar diccionarios en disco duro y cargarlos luego.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="MAESTRO-3">
+                    <button type="submit" class="btn-estudiar" style="background-color: #e74c3c;">Aprobar y Subir a MAESTRO 3</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="MAESTRO-3" class="cursos oculto modulo desbloqueado">
+                <h2>MAESTRO 3: P.O.O. Inicial</h2>
+                <div class="sub-modulo">
+                    <h3>1. Clases y Objetos</h3>
+                    <p>Las Clases son los "moldes" y los Objetos son lo que creas con ese molde.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Método __init__</h3>
+                    <p>El constructor que inicializa los atributos de tu objeto cuando nace.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="MAESTRO-2">
+                    <button type="submit" class="btn-estudiar" style="background-color: #e74c3c;">Aprobar y Subir a MAESTRO 2</button>
+                </form>
+            </div>
 
-            <dev id="oro-2" class="cursos">
+            <div id="MAESTRO-2" class="cursos oculto modulo desbloqueado">
+                <h2>MAESTRO 2: Herencia</h2>
+                <div class="sub-modulo">
+                    <h3>1. Clases Hijas</h3>
+                    <p>Crea nuevas clases que heredan todo de otra clase superior.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Función super()</h3>
+                    <p>Permite llamar métodos de la clase padre sin reescribir código.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="MAESTRO-1">
+                    <button type="submit" class="btn-estudiar" style="background-color: #e74c3c;">Aprobar y Subir a MAESTRO 1</button>
+                </form>
+            </div>
 
-            </dev>
+            <div id="MAESTRO-1" class="cursos oculto modulo desbloqueado">
+                <h2>MAESTRO 1: Métodos Mágicos</h2>
+                <div class="sub-modulo">
+                    <h3>1. Dunder Methods</h3>
+                    <p>Métodos especiales como <code>__str__</code> para definir cómo se imprime tu objeto.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Decoradores</h3>
+                    <p>Funciones que "envuelven" a otras para darles superpoderes extra.</p>
+                </div>
+                <form action="/subir_nivel" method="POST">
+                    <input type="hidden" name="nuevo_nivel" value="CODE-PREDATOR">
+                    <button type="submit" class="btn-estudiar" style="background-color: #e74c3c;">Aprobar y Subir a CODE-PREDATOR</button>
+                </form>
+            </div>
 
-            <dev id="oro-1" class="cursos">
+            <div id="CODE-PREDATOR" class="cursos oculto modulo desbloqueado">
+                <h2>CODE-PREDATOR: Nivel Máximo</h2>
+                <div class="sub-modulo">
+                    <h3>1. Consumo de APIs</h3>
+                    <p>Usa la librería <code>requests</code> para traer datos de internet a tu app.</p>
+                </div>
+                <div class="sub-modulo">
+                    <h3>2. Bases de Datos (SQL)</h3>
+                    <p>Conecta Python con bases de datos como MySQL para proyectos reales.</p>
+                </div>
+                <!--
+                <form action="/graduacion" method="POST">
+                    <button type="submit" class="btn-estudiar" style="background-color: #27ae60; width: 100%;">
+                        🎓 Tomar Examen de Certificación Final
+                    </button>
+                    
+                </form>
+                -->
+            </div>
 
-            </dev>
+        </div>
 
-            <dev id="platino-3" class="cursos">
+    </main>
 
-            </dev>
+    <script>
+        // La misma lógica de JavaScript se mantiene intacta...
+        const ORDEN_NIVELES = [
+            'BRONCE-3', 'BRONCE-2', 'BRONCE-1',
+            'PLATA-3', 'PLATA-2', 'PLATA-1',
+            'ORO-3', 'ORO-2', 'ORO-1',
+            'PLATINO-3', 'PLATINO-2', 'PLATINO-1',
+            'DIAMANTE-3', 'DIAMANTE-2', 'DIAMANTE-1',
+            'MAESTRO-3', 'MAESTRO-2', 'MAESTRO-1',
+            'CODE-PREDATOR'
+        ];
 
-            <dev id="platino-2" class="cursos">
+        let nivelActual = document.getElementById('nivel-usuario').innerText.trim() || 'BRONCE-3';
+        let indexNivelActual = ORDEN_NIVELES.indexOf(nivelActual);
+        if (indexNivelActual === -1) { indexNivelActual = 0; }
 
-            </dev>
+        window.onload = function() {
+            llenarSelector();
+            mostrarCurso(nivelActual);
+        };
 
-            <dev id="platino-1" class="cursos">
+        function llenarSelector() {
+            const selector = document.getElementById('selector-curso');
+            selector.innerHTML = ''; 
+            for (let i = 0; i <= indexNivelActual; i++) {
+                let opcion = document.createElement('option');
+                opcion.value = ORDEN_NIVELES[i];
+                opcion.text = ORDEN_NIVELES[i];
+                if (i === indexNivelActual) { opcion.selected = true; }
+                selector.appendChild(opcion);
+            }
+        }
 
-            </dev>
+        function mostrarCurso(idCurso) {
+            let todosLosCursos = document.querySelectorAll('.cursos');
+            todosLosCursos.forEach(curso => { curso.classList.add('oculto'); });
+            let cursoActivo = document.getElementById(idCurso);
+            if (cursoActivo) { 
+                cursoActivo.classList.remove('oculto'); 
+                // Actualiza el campo oculto del formulario de comentarios
+                document.getElementById('input-nivel-comentario').value = idCurso;
+            }
+        }
 
-            <dev id="diamante-3" class="cursos">
-
-            </dev>
-
-            <dev id="diamante-2" class="cursos">
-
-            </dev>
-
-            <dev id="diamante-1" class="cursos">
-
-            </dev>
-
-            <dev id="maestro-3" class="cursos">
-
-            </dev>
-
-            <dev id="maestro-2" class="cursos">
-
-            </dev>
-
-            <dev id="maestro-1" class="cursos">
-
-            </dev>
-
-            <dev id="code-predator" class="cursos">
-
-            </dev>
-
-
-
-        </main>
-    </body>
+        function cambiarCurso(nuevoCurso) {
+            let indexSolicitado = ORDEN_NIVELES.indexOf(nuevoCurso);
+            if (indexSolicitado <= indexNivelActual) {
+                mostrarCurso(nuevoCurso);
+            } else {
+                alert("Aún no has desbloqueado este rango.");
+            }
+        }
+    </script>
+</body>
 </html>

@@ -18,3 +18,18 @@ CREATE TABLE IF NOT EXISTS usuarios (
     ) DEFAULT 'BRONCE-3',
     completo_quiz BOOLEAN DEFAULT FALSE
 );
+
+CREATE TABLE IF NOT EXISTS registro_accesos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    fecha_entrada DATETIME NOT NULL,
+    observacion TEXT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS progreso_usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    hecho VARCHAR(100) NOT NULL,
+    UNIQUE(usuario_id, hecho)
+);

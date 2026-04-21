@@ -24,7 +24,20 @@ El proyecto incluye un script en Python que genera una red semántica dinámicam
 ## Instalación y Configuración
 
 ### Dependencias
-???
+- Flask
+- Mysql-connector-python
+- Rule-engine
+- Networkx
+- Matplotlib
+- Experta
+
+Comandos para instalarlas 
+pip install flask
+pip install mysql-connector-python
+pip install rule-engine
+pip install networkx
+pip install matplotlib
+pip install experta
 
 
 ### Configuración de la Base de Datos
