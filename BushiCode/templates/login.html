@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BushiCode Project - Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <main class="contenedor-principal">
+           
+            <!--Login-->
+            <div id="login" class="contenedor-login" {% if vista_activa != 'login' %} oculto {% endif %}">
+                <div class="seccion-login">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">BIENVENIDO!</h2>
+                        </div>
+                    </div>
+
+                    <form class="formulario-login" method="POST">
+                        <div class="grupo-entrada">
+                            <label for="usuario" class="etiqueta-con-icono">
+                                Usuario 
+                                <img src="{{ url_for('static', filename='IMG/ICONS/User.png') }}" alt="Icono Usuario" class="icono-input">
+                            </label>
+
+                            <input 
+                                type="text" 
+                                id="usuario" 
+                                name="usuario" 
+                                placeholder="0000" 
+                                class="campo-texto">
+                            {% if error %}
+                                <p class="mensaje-error">
+                                    {{ error }}
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="contrasena" class="etiqueta-con-icono">
+                                Contraseña 
+                                <img src="{{ url_for('static', filename='img/icons/Candado.png') }}" alt="Icono Candado" class="icono-input">
+                            </label>
+
+                            <input 
+                                type="password" 
+                                id="contrasena" 
+                                name="contrasena" 
+                                placeholder="******" 
+                                class="campo-texto"
+                                required>                     
+                            {% if error %}
+                                <p class="mensaje-error">
+                                    {{ error }}
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="boton" style="margin-top: 20px;">
+                            <button type="submit" class="azul">Ingresar</button>
+                        </div>
+                    </form>
+
+                    <a class="enlace-crear-usuario" onclick="cambiarVistaLogin('crear-usuario', limpiarErrores = true)">Crear nuevo usuario</a>
+
+                </div>
+
+                <div class="logo-lateral">
+                    <img class="imagen-lateral" 
+                    src="{{ url_for('static', filename='img/Imgen-Inicio.png') }}" 
+                    alt="Imagen decorativa">
+                </div>
+            </div>
+
+            <!--Crear usuario-->
+            <div id="crear-usuario" class="oculto" {% if vista_activa != 'crear-usuario' %} oculto {% endif %}>
+                <div class="contenedor-crear-usuario">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">CREAR USUARIO</h2>
+                        </div>
+                    </div>
+
+                    <form class="formulario-nuevo-usuario" action="/crear_usuario" method="POST">  
+                        <div class="grupo-entrada">
+                            <label for="nombre" class="etiqueta-sin-icono">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" class="campo-texto" required>
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="usuario-c" class="etiqueta-sin-icono">Usuario (ID)</label>
+                            <input type="text" id="usuario-c" name="usuario" placeholder="Tu usuario" class="campo-texto" required>
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="correo" class="etiqueta-sin-icono">Correo</label>
+                            <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required class="campo-texto">
+                        </div>
+
+                        <div class="grupo-entrada">
+                            <label for="contrasena-c" class="etiqueta-sin-icono">Contraseña</label>
+                            <input type="password" id="contrasena-c" name="contrasena" placeholder="******" required class="campo-texto">
+                        </div>
+
+                        {% if error_registro %}
+                            <p class="mensaje-error">{{ error_registro }}</p>
+                        {% endif %}                     
+
+                        <div class="boton">
+                            <!--type="submit" es para enviarlo al main.py-->
+                            <button type="submit" class="azul">Crear cuenta</button>
+                            <a class="gris" onclick="cambiarVistaLogin('login', limpiarErrores = true)">Ya tengo una cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--Preguntas-->
+            <div id="preguntas" class="oculto">
+                <div class="contenedor-preguntas">
+                    <div class="encabezado-marca">
+                        <img class="logo-mascota" src="{{ url_for('static', filename='IMG/Python.png') }}" alt="Logo BushiCode">
+                        <div class="titulos">
+                            <h1 class="titulos-marca">BushiCode</h1>
+                            <h2 class="subtitulo">QUIZ NIVELACION</h2>
+                        </div>
+                    </div>
+
+                    <div id="caja-quiz" class="quiz-tarjeta">
+                        <h3 id="texto-pregunta" class="quiz-pregunta">Cargando...</h3>
+                        <p id="hint-multiple" class="texto-multiple">
+                            ✦ Esta pregunta tiene múltiples respuestas correctas. Selecciona todas las que apliquen.
+                        </p>
+                        <div id="contenedor-opciones" class="quiz-opciones"></div>
+                        
+                      
+                        <div class="boton">
+                            <button id="btn-siguiente" class="btn-confirmar" onclick="siguientePregunta()" style="display:none; margin-top:20px;">
+                                Confirmar y Siguiente
+                            </button>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+            <!--Resultado-->
+            <div id="resultado" class="oculto">
+                <div class="contenedor-resultado">
+                    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
+                        <div>
+                            <img id="imagen-nivel" src="" alt="Nivel" style="width: 130px; height: 130px; object-fit: contain;">
+                        </div>
+
+                        <div style="text-align: center;">
+                            <p class="resultado-subtitulo">Tu nivel es</p>
+                            <div class="resultado-nivel" id="resultado-nivel">—</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; width: 100%;">
+                        <div style="padding: 12px; background: #ecf0f1; border-radius: 8px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #7f8c8d; font-weight: 600;">📊 Categoría</p>
+                            <p id="resultado-categoria" style="margin: 6px 0 0 0; font-size: 15px; color: #314353; font-weight: 600;">—</p>
+                        </div>
+
+                        <div style="padding: 12px; background: #e8f4f8; border-radius: 8px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #7f8c8d; font-weight: 600;">🎯 Bloque</p>
+                            <p id="resultado-bloque-nombre" style="margin: 6px 0 0 0; font-size: 15px; color: #314353; font-weight: 600;">—</p>
+                        </div>
+                    </div>
+
+                    <div style="padding: 12px; background: #fff9e6; border-left: 4px solid #f39c12; border-radius: 6px; margin-bottom: 18px; width: 100%;">
+                        <p style="margin: 0 0 6px 0; font-size: 12px; color: #7f8c8d; font-weight: 600;">📚 Recomendado</p>
+                        <p id="resultado-cursos" style="margin: 0; color: #314353; font-size: 13px;">—</p>
+                    </div>
+
+                    <div class="boton" style="margin-top: 15px;">
+                        <a href="{{ url_for('ver_curso') }}" class="azul">Ir a mis Cursos</a>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+        <script  src="{{ url_for('static', filename='js/app.js') }}"></script>
+        
+        <script>
+            function mostrarToast(mensaje, tipo = 'success') {
+                const toast = document.createElement('div');
+                toast.className = 'toast ' + (tipo === 'error' ? 'error' : '');
+                toast.textContent = mensaje;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease-in forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            {% if error %}
+                mostrarToast('✗ {{ error }}', 'error');
+            {% endif %}
+
+            {% if error_registro %}
+                mostrarToast('✗ {{ error_registro }}', 'error');
+            {% endif %}
+
+            {% if vista_activa == 'preguntas' and not error and not error_registro %}
+                {% if usuario_creado %}
+                    mostrarToast('✓ ¡Cuenta creada exitosamente! Completa el quiz', 'success');
+                {% else %}
+                    mostrarToast('✓ ¡Bienvenido! Completa el quiz de nivelación', 'success');
+                {% endif %}
+            {% endif %}
+        </script>
+
+        {% if vista_activa %}
+            <script>
+                {% if error or error_registro %}
+                    cambiarVistaLogin('{{ vista_activa }}', false);
+                {% else %}
+                    cambiarVistaLogin('{{ vista_activa }}', true);
+                {% endif %}
+            </script>     
+        {% endif %}         
+    </body>
+</html>

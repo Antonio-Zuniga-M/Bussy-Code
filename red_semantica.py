@@ -6,10 +6,6 @@ import io
 
 def generar_imagen_red():
     G = nx.DiGraph()
-    
-    # --- 1. EL TRUCO: ORDENAMIENTO FORZADO ---
-    # Al ingresar los nodos en este orden estricto (de izquierda a derecha), 
-    # evitamos que NetworkX los revuelva y cruce las líneas.
     nodos_ordenados = [
         # Raíz (Nivel 0)
         "Bushicode",
@@ -17,24 +13,22 @@ def generar_imagen_red():
         # Ramas Principales (Nivel 1)
         "programación", "Modelo_dominio", "Modelo_estudiante", "Modelo_pedagogico", "Modelo_evaluacion", "python",
         
-        # Sub-ramas (Nivel 2) ordenadas según su padre
-        "temario", "banco de ejercicios", # De Modelo Dominio
-        "Errores frecuentes", "progreso", "nivel", "Perfil_de_aprendizaje", # De Modelo Estudiante
-        "Que enseñar", "dificultad", "gamification", "retroalimentacion", # De Modelo Pedagogico
-        "Salida esperada", "Lógica del programa", "Código del estudiante", "Errores sintácticos", # De Modelo Evaluacion
+        # Sub-ramas (Nivel 2) 
+        "temario", "banco de ejercicios", 
+        "Errores frecuentes", "progreso", "nivel", "Perfil_de_aprendizaje",
+        "Que enseñar", "dificultad", "gamification", "retroalimentacion", 
+        "Salida esperada", "Lógica del programa", "Código del estudiante", "Errores sintácticos", 
         
-        # Detalles finales (Nivel 3) ordenados justo debajo de sus padres
-        "ciclos", "condicionales", "funciones", "variables", "listas", # De Temario
-        "retos", "Opcion multiple", "Correccion de errores", "Codigo incompleto", # De Banco de ejercicios
-        "Ruta personalizada", # De Perfil de aprendizaje
-        "xp", "niveles", "motivacion", # De Gamification
-        "positiva", "correctiva" # De Retroalimentacion
+        # Detalles finales (Nivel 3) 
+        "ciclos", "condicionales", "funciones", "variables", "listas", 
+        "retos", "Opcion multiple", "Correccion de errores", "Codigo incompleto", 
+        "Ruta personalizada", 
+        "xp", "niveles", "motivacion", 
+        "positiva", "correctiva" 
     ]
     
-    # Agregamos los nodos primero para fijar su orden horizontal
     G.add_nodes_from(nodos_ordenados)
 
-    # Definimos y agregamos las relaciones
     relaciones = [
         ("Bushicode", "programación", "enseña"),
         ("Bushicode", "python", "incluye"),
@@ -74,20 +68,11 @@ def generar_imagen_red():
         ("Modelo_evaluacion", "Errores sintácticos", "detecta")
     ]
 
-    #for origen, destino, relacion in relaciones:
-        #G.add_edge(origen, destino, label=relacion)
-    
-    # CÓDIGO MODIFICADO
     for origen, destino, relacion in relaciones:
-        # Intercambiamos origen por destino para que la flecha apunte al padre
         G.add_edge(destino, origen, label=relacion)
 
-    # --- 2. ORDENAMIENTO Y ESPACIADO ---
     for nodo in G.nodes():
         try:
-            #nivel = nx.shortest_path_length(G, "Bushicode", nodo)
-            # CÓDIGO MODIFICADO
-            # Calculamos la distancia de cada nodo HACIA "Bushicode"
             nivel = nx.shortest_path_length(G, nodo, "Bushicode")
         except nx.NetworkXNoPath:
             nivel = 0 
@@ -95,23 +80,20 @@ def generar_imagen_red():
 
     pos = nx.multipartite_layout(G, subset_key="layer", align="horizontal")
 
-    # Invertimos el eje Y (raíz arriba) y estiramos el eje X (horizontal) para que respiren los nodos
     for nodo in pos:
         pos[nodo][1] = -pos[nodo][1] 
         pos[nodo][0] = pos[nodo][0] * 3.5 
 
-    # --- 3. DISEÑO VISUAL ---
     plt.figure(figsize=(32, 16), facecolor="#F8F9FA")
 
     colores_niveles = {
-        0: "#F1C40F", # Amarillo principal
-        1: "#3498DB", # Azul principal
-        2: "#2ECC71", # Verde subtemas
-        3: "#E74C3C", # Rojo detalles
-        4: "#9B59B6"  # Morado extra
+        0: "#F1C40F", 
+        1: "#3498DB", 
+        2: "#2ECC71", 
+        3: "#E74C3C", 
+        4: "#9B59B6"  
     }
 
-    # Flechas un poco más sutiles en su curva (rad=0.03) para que no hagan "moños" extraños
     nx.draw_networkx_edges(
         G, pos, 
         arrows=True, arrowsize=18, edge_color="#95A5A6", width=1.5,
@@ -140,7 +122,6 @@ def generar_imagen_red():
     plt.axis("off") 
     plt.tight_layout()
 
-    # --- 4. EXPORTACIÓN ---
     img = io.BytesIO()
     plt.savefig(img, format='png', dpi=120, facecolor="#F8F9FA") 
     img.seek(0)

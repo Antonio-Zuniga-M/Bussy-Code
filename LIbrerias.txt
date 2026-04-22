@@ -1,0 +1,6 @@
+pip install flask
+pip install mysql-connector-python
+pip install rule-engine
+pip install networkx
+pip install matplotlib
+pip install experta

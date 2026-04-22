@@ -1,17 +1,9 @@
-# motor_inferencia.py
-# Sistema Experto de Nivelación BushiCode
-# Librería: experta (pip install experta)
 import collections
 from preguntas import preguntas_quiz
 import collections.abc
 collections.Mapping = collections.abc.Mapping
 
 from experta import *
-
-
-# ─────────────────────────────────────────────
-#  HECHOS (Facts)
-# ─────────────────────────────────────────────
 
 class RespuestaUsuario(Fact):
     """Almacena Q1..Q34 como True/False"""
@@ -25,12 +17,6 @@ class Rango(Fact):
     """Resultado final"""
     valor = Field(str)
 
-
-# ─────────────────────────────────────────────
-#  EVALUADOR DE RESPUESTAS
-#  (Convierte las respuestas del form en True/False)
-# ─────────────────────────────────────────────
-
 def evaluar_respuestas(respuestas_frontend: list) -> dict:
     """
     Entrada del JS: [ [1], [1,3], [2], ... ] (Lista de listas)
@@ -41,7 +27,6 @@ def evaluar_respuestas(respuestas_frontend: list) -> dict:
     for indice, pregunta in enumerate(preguntas_quiz):
         id_pregunta = f"Q{pregunta['id']}"
         
-        # Evitar errores si el usuario mandó menos respuestas de las esperadas
         if indice < len(respuestas_frontend):
             resp_usuario = set(respuestas_frontend[indice])
         else:
@@ -49,15 +34,9 @@ def evaluar_respuestas(respuestas_frontend: list) -> dict:
             
         resp_correcta = set(pregunta["respuesta_correcta"])
         
-        # Si los sets son idénticos, la respuesta es True
         evaluacion[id_pregunta] = (resp_usuario == resp_correcta)
         
     return evaluacion
-
-
-# ─────────────────────────────────────────────
-#  MOTOR DE INFERENCIA
-# ─────────────────────────────────────────────
 
 class MotorBushiCode(KnowledgeEngine):
 
@@ -467,15 +446,8 @@ class MotorBushiCode(KnowledgeEngine):
     )
     def r39(self, r):
         self.declare(Rango(valor="CODE-PREDATOR"))
-
-
-    # ══════════════════════════════════════════
-    #  FASE 7 — REGLAS ANTI-TRAMPA (R40 - R45)
-    #  salience=100 → se disparan ANTES que el resto
-    # ══════════════════════════════════════════
-
-    # R40: Adivinó C-Extensions pero no sabe declarar variables
-# R40: Adivinó concurrencia pero falla en lo básico
+ 
+    # R40
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -486,7 +458,7 @@ class MotorBushiCode(KnowledgeEngine):
     def r40(self, r):
         self.declare(Rango(valor="BRONCE-3"))
 
-    # R41: Adivinó asincronismo pero no sabe qué es un return
+    # R41
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -497,7 +469,7 @@ class MotorBushiCode(KnowledgeEngine):
     def r41(self, r):
         self.declare(Rango(valor="BRONCE-2"))
 
-    # R42: Adivinó decoradores pero no sabe usar if/else
+    # R42
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -508,7 +480,7 @@ class MotorBushiCode(KnowledgeEngine):
     def r42(self, r):
         self.declare(Rango(valor="BRONCE-3"))
 
-    # R43: Adivinó clases pero no sabe usar una lista
+    # R43
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -519,7 +491,7 @@ class MotorBushiCode(KnowledgeEngine):
     def r43(self, r):
         self.declare(Rango(valor="BRONCE-1"))
 
-    # R44: Adivinó testing pero falla en funciones básicas
+    # R44
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -530,7 +502,7 @@ class MotorBushiCode(KnowledgeEngine):
     def r44(self, r):
         self.declare(Rango(valor="BRONCE-2"))
 
-    # R45: Adivinó entornos virtuales pero falla en operadores
+    # R45
     @Rule(
         AND(
             AS.r << RespuestaUsuario(),
@@ -541,12 +513,6 @@ class MotorBushiCode(KnowledgeEngine):
     def r45(self, r):
         self.declare(Rango(valor="BRONCE-3"))
 
-
-# ─────────────────────────────────────────────
-#  FUNCIÓN PRINCIPAL — inferir_nivel()
-#  Entrada: respuestas crudas del formulario
-#  Salida:  dict con bloque y rango final
-# ─────────────────────────────────────────────
 
 def inferir_nivel(respuestas_usuario: dict) -> dict:
     """

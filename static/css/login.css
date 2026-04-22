@@ -189,9 +189,10 @@ body {
 #crear-usuario .contenedor-crear-usuario,  #preguntas .contenedor-preguntas,  #resultado .contenedor-resultado{
     display: flex;
     width: 92vw;
-    height: 92vh;
+    max-height: 92vh;
     background-color: white;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -199,6 +200,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#resultado .contenedor-resultado {
+    padding: 30px;
+    max-height: 95vh;
 }
 
 #crear-usuario .formulario-nuevo-usuario{
@@ -292,12 +298,15 @@ body {
 
 .quiz-tarjeta {
     width: 100%;
-    max-width: 550px; 
-    background-color: #ffffff;
-    padding: 35px 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(49, 67, 83, 0.08);
-    border: 1px solid #edf2f7;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .quiz-pregunta {
@@ -307,6 +316,8 @@ body {
     line-height: 1.4;
     font-weight: 700;
     text-align: center;
+    max-width: 700px;
+    width: 100%;
 }
 
 .texto-multiple {
@@ -327,6 +338,8 @@ body {
     flex-direction: column;
     gap: 12px;
     margin-top: 25px;
+    max-width: 700px;
+    width: 100%;
 }
 
 .opcion {
@@ -339,6 +352,7 @@ body {
     text-align: left;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    word-wrap: break-word;
 }
 
 .opcion:hover {
@@ -359,8 +373,9 @@ body {
 
 .btn-confirmar {
     width: 100%;
+    max-width: 400px;
     padding: 15px;
-    margin-top: 25px;
+    margin: 25px auto 0 auto;
     border: none;
     border-radius: 24px;
     font-size: 1.05rem;
@@ -369,6 +384,7 @@ body {
     transition: all 0.3s ease;
     background-color: #e2e8f0;
     color: #94a3b8;
+    display: block;
 }
 
 .btn-confirmar.habilitado {
@@ -384,24 +400,39 @@ body {
 
 
 .resultado-subtitulo {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #64748b;
-    margin-top: 20px;
+    margin: 0 0 8px 0;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     font-weight: 600;
-    animation: fadeInDown 0.6s ease-out;
+}
+
+.resultado-imagen {
+    margin: 20px 0;
+}
+
+.resultado-imagen img {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
 }
 
 .resultado-nivel {
     font-size: 4.5rem;
+    font-weight3.2rem;
     font-weight: 800;
     background: linear-gradient(135deg, #314353, #789ebf);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 15px 0;
-    text-shadow: 2px 4px 8px rgba(84, 114, 140, 0.2);
-    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 8px 0 0 0, 0.32, 1.275);
+}
+
+.resultado-categoria {
+    font-size: 1.3rem;
+    color: #54728c;
+    margin: 10px 0;
+    font-weight: 600;
 }
 
 .resultado-bloque {
@@ -414,12 +445,11 @@ body {
     max-width: 450px;
     line-height: 1.6;
     text-align: center;
-    margin-bottom: 30px;
+    margin: 30px auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* ── ANIMACIONES GLOBALES PARA RESULTADOS ────────────────── */
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -433,4 +463,184 @@ body {
 @keyframes zoomIn {
     from { opacity: 0; transform: scale(0.5); }
     to { opacity: 1; transform: scale(1); }
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #2ecc71;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+    font-weight: 600;
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+.toast.error {
+    background-color: #e74c3c;
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from { 
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to { 
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    #crear-usuario .contenedor-crear-usuario,
+    #preguntas .contenedor-preguntas,
+    #resultado .contenedor-resultado {
+        width: 95vw;
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .encabezado-marca {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .logo-mascota {
+        width: 60px;
+        height: 60px;
+    }
+
+    .titulos-marca {
+        font-size: 2rem;
+    }
+
+    #login .seccion-login {
+        padding: 30px;
+    }
+
+    #login .formulario-login {
+        max-width: 100%;
+    }
+
+    #crear-usuario .contenedor-crear-usuario,
+    #preguntas .contenedor-preguntas,
+    #resultado .contenedor-resultado {
+        width: 98vw;
+        max-height: 90vh;
+        padding: 20px 15px;
+    }
+
+    #resultado .contenedor-resultado {
+        padding: 20px 15px;
+    }
+
+    #crear-usuario .formulario-nuevo-usuario,
+    #crear-usuario .boton,
+    #resultado .boton,
+    #preguntas .boton,
+    #login .boton {
+        max-width: 100%;
+    }
+
+    .quiz-pregunta {
+        font-size: 1.1rem;
+    }
+
+    .quiz-opciones {
+        max-width: 100%;
+    }
+
+    .btn-confirmar {
+        max-width: 100%;
+    }
+
+    .resultado-nivel {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .encabezado-marca {
+        gap: 10px;
+    }
+
+    .logo-mascota {
+        width: 50px;
+        height: 50px;
+    }
+
+    .titulos-marca {
+        font-size: 1.5rem;
+    }
+
+    .subtitulo {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    #login .seccion-login {
+        padding: 20px;
+    }
+
+    #login .logo-lateral {
+        display: none;
+    }
+
+    #login.contenedor-login {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #crear-usuario .contenedor-crear-usuario,
+    #preguntas .contenedor-preguntas,
+    #resultado .contenedor-resultado {
+        width: 100vw;
+        max-height: 100vh;
+        padding: 15px;
+        border-radius: 0;
+    }
+
+    .quiz-pregunta {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .opcion {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+
+    .btn-confirmar {
+        padding: 12px;
+        font-size: 1rem;
+        margin: 15px auto 0 auto;
+    }
+
+    .resultado-nivel {
+        font-size: 2rem;
+    }
+
+    .toast {
+        max-width: calc(100vw - 20px);
+        left: 10px;
+        right: 10px;
+    }
+}
 }

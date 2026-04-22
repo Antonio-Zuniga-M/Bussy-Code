@@ -23,7 +23,6 @@ function mostrarPregunta() {
     contenedorOpciones.innerHTML = ''; 
     const btnSiguiente = document.getElementById('btn-siguiente');
     
-    // Asegurarnos de que el botón siempre esté visible pero deshabilitado visualmente y funcionalmente
     btnSiguiente.style.display = 'block'; 
     btnSiguiente.classList.remove('habilitado');
     btnSiguiente.disabled = true;
@@ -65,15 +64,14 @@ function mostrarPregunta() {
 }
 
 function siguientePregunta() {
-        // Guardamos la selección definitiva en el array principal
-        respuestasUsuario.push([...seleccionActual]);
-        indiceActual++;
+    respuestasUsuario.push([...seleccionActual]);
+    indiceActual++;
 
-        if (indiceActual < preguntas.length) {
-            mostrarPregunta();
-        } else {
-            document.getElementById('caja-quiz').innerHTML = "<h2>Evaluando respuestas...</h2>";
-            
+    if (indiceActual < preguntas.length) {
+        mostrarPregunta();
+    } else {
+        document.getElementById('caja-quiz').innerHTML = "<h2>Evaluando respuestas...</h2>";
+        
         fetch('/quiz/resultado', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -82,9 +80,25 @@ function siguientePregunta() {
             .then(res => res.json())
             .then(resultado => {
                 document.getElementById('resultado-nivel').innerText = resultado.nivel;
-                document.getElementById('resultado-bloque').innerHTML = `Bloque alcanzado: <strong>${resultado.bloque.replace('_', ' ')}</strong><br><em>${resultado.mensaje}</em>`;
+                
+                document.getElementById('resultado-categoria').innerText = resultado.categoria;
+                
+                document.getElementById('resultado-cursos').innerText = resultado.cursos_recomendados;
+                
+                const imagenNivel = document.getElementById('imagen-nivel');
+                imagenNivel.src = resultado.imagen;
+                imagenNivel.onerror = function() {
+                    this.src = '/static/img/icons/default.png';
+                };
+                
+                document.getElementById('resultado-bloque-nombre').innerText = resultado.bloque.replace('_', ' ');
+                
                 cambiarVistaLogin('resultado', true);
-        });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('caja-quiz').innerHTML = "<h2>Error al evaluar respuestas</h2>";
+            });
     }
 }
 

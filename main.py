@@ -1,16 +1,67 @@
-from flask import Flask, render_template, send_file, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, send_file, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
 from red_semantica import generar_imagen_red
 from database.conexion import obtener_conexion
 from preguntas import preguntas_quiz
 from motor_inferencia import inferir_nivel
 
-
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-from datetime import datetime
-
+import rule_engine
 
 from datetime import datetime
+
+NIVELES_CATEGORIA = {
+    'BRONCE-3': 'Básico', 'BRONCE-2': 'Básico', 'BRONCE-1': 'Básico',
+    'PLATA-3': 'Intermedio', 'PLATA-2': 'Intermedio', 'PLATA-1': 'Intermedio',
+    'ORO-3': 'Avanzado', 'ORO-2': 'Avanzado', 'ORO-1': 'Avanzado',
+    'PLATINO-3': 'Avanzado', 'PLATINO-2': 'Avanzado', 'PLATINO-1': 'Avanzado',
+    'DIAMANTE-3': 'Experto', 'DIAMANTE-2': 'Experto', 'DIAMANTE-1': 'Experto',
+    'MAESTRO-3': 'Experto', 'MAESTRO-2': 'Experto', 'MAESTRO-1': 'Experto',
+    'CODE-PREDATOR': 'Leyenda'
+}
+
+NIVELES_IMAGENES = {
+    'BRONCE-3': 'you_re_tiering_me_apart_bronze_rs26.png',
+    'BRONCE-2': 'you_re_tiering_me_apart_bronze_rs26.png',
+    'BRONCE-1': 'you_re_tiering_me_apart_bronze_rs26.png',
+    'PLATA-3': 'you_re_tiering_me_apart_silver_rs26.png',
+    'PLATA-2': 'you_re_tiering_me_apart_silver_rs26.png',
+    'PLATA-1': 'you_re_tiering_me_apart_silver_rs26.png',
+    'ORO-3': 'you_re_tiering_me_apart_gold_rs26.png',
+    'ORO-2': 'you_re_tiering_me_apart_gold_rs26.png',
+    'ORO-1': 'you_re_tiering_me_apart_gold_rs26.png',
+    'PLATINO-3': 'you_re_tiering_me_apart_platinum_rs26.png',
+    'PLATINO-2': 'you_re_tiering_me_apart_platinum_rs26.png',
+    'PLATINO-1': 'you_re_tiering_me_apart_platinum_rs26.png',
+    'DIAMANTE-3': 'you_re_tiering_me_apart_diamond_rs26.png',
+    'DIAMANTE-2': 'you_re_tiering_me_apart_diamond_rs26.png',
+    'DIAMANTE-1': 'you_re_tiering_me_apart_diamond_rs26.png',
+    'MAESTRO-3': 'you_re_tiering_me_apart_master_rs26.png',
+    'MAESTRO-2': 'you_re_tiering_me_apart_master_rs26.png',
+    'MAESTRO-1': 'you_re_tiering_me_apart_master_rs26.png',
+    'CODE-PREDATOR': 'you_re_tiering_me_apart_apex_predator_rs26.png'
+}
+
+CURSOS_RECOMENDADOS = {
+    'BRONCE-3': 'Hola Mundo - Variables',
+    'BRONCE-2': 'Variables - Tipos de Datos',
+    'BRONCE-1': 'Tipos de Datos - Operadores',
+    'PLATA-3': 'Operadores - Condicionales',
+    'PLATA-2': 'Condicionales - Ciclos',
+    'PLATA-1': 'Ciclos - Listas',
+    'ORO-3': 'Listas - Tuplas',
+    'ORO-2': 'Tuplas - Diccionarios',
+    'ORO-1': 'Diccionarios - Funciones',
+    'PLATINO-3': 'Funciones - Scope',
+    'PLATINO-2': 'Scope - Lambdas',
+    'PLATINO-1': 'Lambdas - Manejo de Errores',
+    'DIAMANTE-3': 'Manejo de Errores - Archivos',
+    'DIAMANTE-2': 'Archivos - P.O.O.',
+    'DIAMANTE-1': 'P.O.O. - Decoradores',
+    'MAESTRO-3': 'Decoradores - Modules',
+    'MAESTRO-2': 'Modules - APIs',
+    'MAESTRO-1': 'APIs - Bases de Datos',
+    'CODE-PREDATOR': 'Domina Python - Proyectos Avanzados'
+}
 
 app = Flask(__name__)
 app.secret_key = 'bushicode_secreto_123' 
@@ -55,8 +106,8 @@ def crear_usuario():
                 session['usuario_logeado'] = usuario
                 session['nombre_completo'] = nombre
                 session['nivel'] = None 
-                return render_template('login.html', vista_activa='preguntas')
-                #redirect?
+                session['usuario_creado'] = True
+                return render_template('login.html', vista_activa='preguntas', usuario_creado=True)
                 
             except mysql.connector.Error as error_:                
                 return render_template('login.html', vista_activa='crear-usuario', error_registro="El usuario o correo ya existen. Intenta con otro.")
@@ -67,52 +118,14 @@ def crear_usuario():
                     conexion.close()
         return "Error al conectar con la base de datos."
 
-"""
-@app.route('/quiz/resultado', methods=['POST'])
-def quiz_resultado():
-    datos = request.get_json()
-    respuestas_usuario = datos.get('respuestas', []) 
-    resultado = inferir_nivel(respuestas_usuario)
-    return jsonify({
-        "nivel": resultado["rango"],
-        "bloque": resultado["bloque"],
-        "mensaje": "Diagnóstico completado."
-    })
-"""
 @app.route('/logout')
 def logout():
     session.clear() 
     return redirect(url_for('inicio'))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ... (Tus otras importaciones de red_semantica, motor_inferencia, etc.) ...
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # 1. Recibimos los datos del formulario
         usuario_html = request.form.get('usuario')
         contrasena_html = request.form.get('contrasena')
         
@@ -120,24 +133,20 @@ def login():
         if conexion:
             cursor = conexion.cursor(dictionary=True)
             
-            # 2. Buscamos por ID de usuario O por correo
             consulta = """
                 SELECT * FROM usuarios 
                 WHERE (usuario = %s OR correo = %s) AND contrasena = %s
             """
-            # Pasamos usuario_html dos veces para que busque en ambas columnas
             cursor.execute(consulta, (usuario_html, usuario_html, contrasena_html))
             user_data = cursor.fetchone()
             
             if user_data:
-                # 3. Si los datos son correctos, guardamos la sesión
                 session['usuario_id'] = user_data['id']
                 session['usuario_logeado'] = user_data['usuario']
                 session['nombre_completo'] = user_data['nombre']
                 session['nivel'] = user_data['nivel']
                 
-                # 4. Registramos el acceso en la base de datos
-                from datetime import datetime # Asegúrate de que esto esté al inicio de tu archivo main.py
+                from datetime import datetime 
                 fecha_actual = datetime.now()
                 cursor.execute("INSERT INTO registro_accesos (usuario_id, fecha_entrada) VALUES (%s, %s)", 
                                (user_data['id'], fecha_actual))
@@ -146,17 +155,13 @@ def login():
                 cursor.close()
                 conexion.close()
                 
-                # 5. Redirección dependiendo del progreso
                 if not user_data['completo_quiz']:
-                    # Si no ha hecho el quiz, lo dejamos en login.html pero mostramos las preguntas
                     return render_template('login.html', vista_activa='preguntas')
                 else:
-                    # Si ya lo hizo, lo mandamos directo a cursos
                     return redirect(url_for('ver_curso'))
             else:
                 cursor.close()
                 conexion.close()
-                # Si fallan las credenciales, recargamos el login con un error
                 return render_template('login.html', vista_activa='login', error="Usuario, correo o contraseña incorrectos.")
                 
     return render_template('login.html', vista_activa='login')
@@ -166,11 +171,9 @@ def quiz_resultado():
     datos = request.get_json()
     respuestas_usuario = datos.get('respuestas', []) 
     
-    # Tu motor de inferencia saca el rango
     resultado = inferir_nivel(respuestas_usuario)
     nivel_asignado = resultado["rango"]
     
-    # Guardarlo en la base de datos
     if 'usuario_id' in session:
         conexion = obtener_conexion()
         if conexion:
@@ -184,25 +187,58 @@ def quiz_resultado():
             cursor.close()
             conexion.close()
             
-            session['nivel'] = nivel_asignado # Actualizamos la sesión
-            
+            session['nivel'] = nivel_asignado 
+    
+    categoria = NIVELES_CATEGORIA.get(nivel_asignado, 'Desconocida')
+    cursos = CURSOS_RECOMENDADOS.get(nivel_asignado, 'Cursos Avanzados')
+    imagen = NIVELES_IMAGENES.get(nivel_asignado, 'you_re_tiering_me_apart_bronze_rs26.png')
+    
     return jsonify({
         "nivel": nivel_asignado,
         "bloque": resultado["bloque"],
-        "mensaje": "Diagnóstico completado."
+        "mensaje": "Diagnóstico completado.",
+        "categoria": categoria,
+        "cursos_recomendados": cursos,
+        "imagen": f"/static/img/icons/{imagen}"
     })
-
-# --- NUEVAS RUTAS PARA EL CURSO ---
 
 @app.route('/cursos')
 def ver_curso():
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
     
-    # Pasamos las variables de sesión al HTML
-    return render_template('cursos.html', 
-                           nombre=session.get('nombre_completo'), 
-                           nivel=session.get('nivel'))
+    conexion = obtener_conexion()
+    if conexion:
+        cursor = conexion.cursor(dictionary=True)
+        
+        cursor.execute("SELECT id, nombre, usuario, nivel FROM usuarios WHERE id = %s", 
+                       (session['usuario_id'],))
+        user_data = cursor.fetchone()
+        
+        cursor.execute("""
+            SELECT COUNT(*) as total_entradas, MAX(fecha_entrada) as ultima_entrada
+            FROM registro_accesos
+            WHERE usuario_id = %s
+        """, (session['usuario_id'],))
+        accesos_data = cursor.fetchone()
+        
+        cursor.close()
+        conexion.close()
+        
+        if user_data and accesos_data:
+            categoria_nivel = NIVELES_CATEGORIA.get(user_data['nivel'], 'Desconocido')
+            ultima_entrada_formateada = accesos_data['ultima_entrada'].strftime('%d/%m/%Y %H:%M') if accesos_data['ultima_entrada'] else 'Nunca'
+            
+            return render_template('cursos.html', 
+                                   nombre=user_data['nombre'],
+                                   usuario=user_data['usuario'],
+                                   usuario_id=user_data['id'],
+                                   nivel=user_data['nivel'],
+                                   categoria_nivel=categoria_nivel,
+                                   total_entradas=accesos_data['total_entradas'],
+                                   ultima_entrada=ultima_entrada_formateada)
+    
+    return "Error al cargar la información del usuario"
 
 @app.route('/enviar_observacion', methods=['POST'])
 def enviar_observacion():
@@ -214,7 +250,6 @@ def enviar_observacion():
         conexion = obtener_conexion()
         if conexion:
             cursor = conexion.cursor()
-            # Registramos la observación
             cursor.execute("""
                 INSERT INTO registro_accesos (usuario_id, fecha_entrada, observacion) 
                 VALUES (%s, %s, %s)
@@ -227,9 +262,8 @@ def enviar_observacion():
 
 @app.route('/subir_nivel', methods=['POST'])
 def subir_nivel():
-    # Esta ruta se llama cuando pasan el examen final de un módulo
     if 'usuario_id' not in session:
-        return redirect(url_for('login'))
+        return jsonify({'success': False, 'message': 'No autorizado'}), 401
         
     usuario_id = session['usuario_id']
     nuevo_nivel = request.form.get('nuevo_nivel')
@@ -239,30 +273,64 @@ def subir_nivel():
     if conexion:
         cursor = conexion.cursor()
         try:
-            # 1. Actualizar rango en usuarios
             cursor.execute("UPDATE usuarios SET nivel = %s WHERE id = %s", (nuevo_nivel, usuario_id))
-            # 2. Registrar en progreso_usuario (usamos IGNORE por si ya lo había pasado)
             cursor.execute("INSERT IGNORE INTO progreso_usuario (usuario_id, hecho) VALUES (%s, %s)", (usuario_id, hecho_completado))
             conexion.commit()
             session['nivel'] = nuevo_nivel # Actualizamos sesión
+            return jsonify({'success': True, 'message': f'Nivel actualizado a {nuevo_nivel}'}), 200
         except mysql.connector.Error as err:
             print(f"Error: {err}")
+            return jsonify({'success': False, 'message': 'Error en la base de datos'}), 500
         finally:
             cursor.close()
             conexion.close()
+    
+    return jsonify({'success': False, 'message': 'No se pudo conectar a la base de datos'}), 500
+
+@app.route('/api/comentarios')
+def api_comentarios():
+    conexion = obtener_conexion()
+    if conexion:
+        cursor = conexion.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT u.usuario, u.nivel, r.observacion, r.fecha_entrada
+            FROM registro_accesos r
+            JOIN usuarios u ON r.usuario_id = u.id
+            WHERE r.observacion IS NOT NULL
+            ORDER BY r.fecha_entrada DESC
+            LIMIT 50
+        """)
+        registros = cursor.fetchall()
+        cursor.close()
+        conexion.close()
+        
+        comentarios = []
+        for r in registros:
+            obs = r['observacion']
+            if '[Nivel:' in obs:
+                partes = obs.split('] - ', 1)
+                texto = partes[1] if len(partes) > 1 else obs
+                nivel = partes[0].replace('[Nivel: ', '')
+            else:
+                texto = obs
+                nivel = 'Desconocido'
             
-    return redirect(url_for('ver_curso'))
-
-
-# Importa aquí tu conector de base de datos (pymysql, mysql.connector, etc.)
+            comentarios.append({
+                'usuario': r['usuario'],
+                'nivel': nivel,
+                'texto': texto,
+                'fecha': r['fecha_entrada'].strftime('%d/%m/%Y %H:%M') if r['fecha_entrada'] else 'Sin fecha'
+            })
+        
+        return jsonify({'comentarios': comentarios})
+    
+    return jsonify({'comentarios': []})
 
 @app.route('/guardar_comentario', methods=['POST'])
 def guardar_comentario():
-    # 1. Verificar sesión
     if 'usuario_id' not in session:
-        return redirect(url_for('login'))
+        return jsonify({'success': False, 'error': 'No autenticado'}), 401
 
-    # 2. Capturar datos del HTML
     usuario_id = session['usuario_id']
     comentario = request.form.get('comentario')
     nivel_curso = request.form.get('nivel_curso', 'Desconocido') 
@@ -270,7 +338,6 @@ def guardar_comentario():
     observacion_completa = f"[Nivel: {nivel_curso}] - {comentario}"
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    # 3. Abrir conexión a la BD (¡Esto faltaba!)
     conexion = obtener_conexion()
     
     if conexion:
@@ -286,14 +353,16 @@ def guardar_comentario():
             conexion.commit() 
             cursor.close()
             
+            return jsonify({'success': True, 'message': 'Comentario guardado'})
+            
         except Exception as e:
             print(f"Error al guardar comentario: {e}")
+            return jsonify({'success': False, 'error': str(e)}), 500
             
         finally:
-            conexion.close() # Siempre es buena práctica cerrar la conexión al terminar
-            
-    # 4. Redirigir usando el nombre exacto de tu función principal (ver_curso)
-    return redirect(url_for('ver_curso'))
+            conexion.close()
+    
+    return jsonify({'success': False, 'error': 'Error de conexión'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

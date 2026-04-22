@@ -1,8 +1,9 @@
 import mysql.connector
 
 DB_HOST = "localhost"
-DB_USER = "root"
-DB_PASS = "123456789" # Recuerda a tu equipo ajustar esto en sus máquinas
+DB_PORT = 3310 # Debe cambiarse al local
+DB_USER = "root" # Debe cambiarse al local
+DB_PASS = "Palomo29MYSQL" # Debe cambiarse al local
 DB_NAME = "BushiCode"
 
 def obtener_conexion():
@@ -13,6 +14,7 @@ def obtener_conexion():
     try:
         conexion = mysql.connector.connect(
             host=DB_HOST,
+            port=DB_PORT,
             user=DB_USER,
             password=DB_PASS,
             database=DB_NAME

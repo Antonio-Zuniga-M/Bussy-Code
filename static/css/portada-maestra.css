@@ -50,10 +50,10 @@ body{
 }
 
 .logos{
-    position: absolute; /* Lo saca del centro y permite moverlo libremente */
-    top: 40px;          /* Lo empuja 40px hacia abajo desde el techo */
-    left: 0;            /* Lo ancla exactamente al borde izquierdo */
-    padding: 0 50px;    /* Relleno interior: 0px vertical, 50px horizontal (evita que toque la orilla) */
+    position: absolute; 
+    top: 40px;          
+    left: 0;            
+    padding: 0 50px;    
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -93,8 +93,8 @@ body{
     background-color: #ffffff;
     padding: 25px;
     border-radius: 16px;
-    border: 1px solid #e0e0e0; /* Un borde súper sutil */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Sombra muy suave para darle volumen */
+    border: 1px solid #e0e0e0; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); 
 }
 
 
@@ -116,17 +116,17 @@ body{
 .maestra p {
     font-size: 1.05rem;
     font-weight: 600;
-    color: #2C3E50; /* Un azul oscuro para resaltar la autoridad */
+    color: #2C3E50; 
 }
 
 .alumnos {
     display: flex;
-    flex-wrap: wrap; /* Esto permite que el h2 ocupe su propia línea y empuje lo demás abajo */
-    justify-content: space-between; /* Manda los nombres a la izq y matrículas a la der */
+    flex-wrap: wrap; 
+    justify-content: space-between; 
 }
 
 .alumnos h2 {
-    width: 100%; /* Forzamos al título a abarcar todo el ancho */
+    width: 100%; 
     text-align: center;
 }
 
@@ -137,7 +137,7 @@ body{
 .nombres p {
     font-size: 0.95rem;
     color: #4a4a4a;
-    margin-bottom: 8px; /* Da un poco de aire entre cada línea */
+    margin-bottom: 8px; 
 }
 
 .matricula {
@@ -146,9 +146,8 @@ body{
 
 .matricula p {
     font-size: 0.95rem;
-    color: #CD5124; /* Usamos tu color naranja principal para que resalte el número */
-    font-weight: 600;
-    margin-bottom: 8px; /* Debe ser igual al de nombres para que queden alineados */
+    color: #CD5124; 
+    margin-bottom: 8px; 
 }
 
 .botones{
